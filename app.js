@@ -1,14 +1,18 @@
 /**
  * Created by Shainkey on 16-10-2019.
  */
-const app = require('express')();
+const express = require('express');
 const fetch = require("node-fetch");
 const parser = require('xml2json');
 const cors = require('cors');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const path = require('path');
 
+
+const app = express();
 app.use(cors())
-app.use(bodyParser.json({ extended: true }))
+app.use(bodyParser.json({ extended: true }));
+app.use('/', express.static(path.join(__dirname, '../public')));
 
 app.get('/newsFeed',(req, res)=>{
 
@@ -43,4 +47,8 @@ app.post('/getNewsFeed',(req,res)=>{
    });
 })
 
-app.listen(8000)
+    app.get('/*', (req, res) => {
+      res.sendFile(path.join(__dirname, './public/build/index.html'));
+    });
+
+app.listen(8000, () => console.log(`Stack listening on port 8000`));
